@@ -38,9 +38,7 @@ steps:
     jdkArchitectureOption: 'x64'
     goals: 'package  $(MAVEN_OPTS)'
 
-- task: MavenAuthenticate@0
-  inputs:
-    mavenServiceConnections: 'genea-exchange-repository, genea-exchange-repository-v2, mule-releases-ee'
+
 
 - task: Maven@3
   displayName: Deploy
