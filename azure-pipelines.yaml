@@ -1,0 +1,67 @@
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-latest
+variables:
+- group: Anypoint Platform Credentials
+- name: MAVEN_CACHE_FOLDER
+  value: $(Pipeline.Workspace)/.m2/repository
+- name: MAVEN_OPTS
+  value: '-Dmaven.repo.local=$(MAVEN_CACHE_FOLDER)  -s $(muleSettingsFile.secureFilePath)'  
+- name: ANYPOINT_CONN_APP_CLIENT_ID
+  value: $[variables.ANYPOINT_CONN_APP_CLIENT_ID]
+- name: ANYPOINT_CONN_APP_CLIENT_SECRET
+  value: $[variables.ANYPOINT_CONN_APP_CLIENT_SECRET]
+  
+
+steps:
+- task: DownloadSecureFile@1
+  name: muleSettingsFile
+  displayName: 'Download Mulesoft Settings'
+  inputs:
+    secureFile: 'settings.xml'
+- task: Cache@2
+  inputs:
+    key: $(Build.SourcesDirectory)/pom.xml
+    path: $(MAVEN_CACHE_FOLDER)
+  displayName: Cache Maven local repo    
+
+- task: Maven@3
+  displayName: Build
+  inputs:
+    options: '-DskipTests'
+    mavenPomFile: 'pom.xml'
+    mavenOptions: '-Xmx3072m'
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '1.8'
+    jdkArchitectureOption: 'x64'
+    goals: 'package  $(MAVEN_OPTS)'
+
+- task: MavenAuthenticate@0
+  inputs:
+    mavenServiceConnections: 'genea-exchange-repository, genea-exchange-repository-v2, mule-releases-ee'
+
+- task: Maven@3
+  displayName: Deploy
+  inputs:
+    mavenPomFile: 'pom.xml'
+    goals: 'deploy $(MAVEN_OPTS) '
+    options: '-DskipTests mule:deploy -DmuleDeploy -Dconnectedapp_clientId=$(ANYPOINT_CONN_APP_CLIENT_ID) -Dconnectedapp_clientSecret=$(ANYPOINT_CONN_APP_CLIENT_SECRET)'
+    publishJUnitResults: false
+    javaHomeOption: 'JDKVersion'
+    mavenVersionOption: 'Default'
+    mavenAuthenticateFeed: false
+    effectivePomSkip: false
+    sonarQubeRunAnalysis: false
+
+- task: CopyFiles@2
+  inputs:
+    Contents: '**/target/*.jar'
+    TargetFolder: $(Build.ArtifactStagingDirectory)
+    CleanTargetFolder: true
+    flattenFolders: true  
+- task: PublishPipelineArtifact@1
+  inputs:
+    targetPath: $(System.DefaultWorkingDirectory)
+    artifact: 'drop'    
