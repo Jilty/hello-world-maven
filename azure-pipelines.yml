@@ -45,7 +45,7 @@ steps:
   inputs:
     mavenPomFile: 'pom.xml'
     goals: 'deploy $(MAVEN_OPTS) '
-    options: '-DskipTests mule:deploy -DmuleDeploy -Dconnectedapp_clientId=$(ANYPOINT_CONN_APP_CLIENT_ID) -Dconnectedapp_clientSecret=$(ANYPOINT_CONN_APP_CLIENT_SECRET)'
+    options: '-DskipTests  -DmuleDeploy -Dconnectedapp_clientId=$(ANYPOINT_CONN_APP_CLIENT_ID) -Dconnectedapp_clientSecret=$(ANYPOINT_CONN_APP_CLIENT_SECRET)'
     publishJUnitResults: false
     javaHomeOption: 'JDKVersion'
     mavenVersionOption: 'Default'
