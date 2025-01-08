@@ -54,8 +54,8 @@
 							<secure.key>mule</secure.key>								
 						</properties>
 						<connectedAppGrantType>client_credentials</connectedAppGrantType>
-						<connectedAppClientId>${connectedapp_clientId}</connectedAppClientId>
-						<connectedAppClientSecret>${connectedapp_clientSecret}</connectedAppClientSecret>
+						<connectedAppClientId>3ca623ddef8f49cb928125bbf275b97f</connectedAppClientId>
+						<connectedAppClientSecret>1C6C5f34775D47c2beF42d3CEC73508c</connectedAppClientSecret>
 					</cloudHubDeployment>
 				</configuration>
 			</plugin>
