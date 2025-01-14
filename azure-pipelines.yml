@@ -52,6 +52,16 @@ steps:
     mavenAuthenticateFeed: false
     effectivePomSkip: false
     sonarQubeRunAnalysis: false
+- task: Maven@3
+  inputs:
+    mavenPomFile: 'pom.xml'
+    options: '-Dartifact.directory=$(Build.ArtifactStagingDirectory)'
+    mavenOptions: '-Xmx1024m'
+    publishJUnitResults: true
+    testResultsFiles: '**/surefire-reports/TEST-*.xml'
+    goals: 'deploy'
+  displayName: 'Deploy to Azure Artifacts'    
+    
 
 - task: CopyFiles@2
   inputs:
