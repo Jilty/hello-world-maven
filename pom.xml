@@ -90,6 +90,16 @@
 			<url>https://repository.mulesoft.org/releases/</url>
 			<layout>default</layout>
 		</repository>
+		<repository>
+			  <id>Jilty</id>
+			  <url>https://pkgs.dev.azure.com/Jilty/_packaging/Jilty/maven/v1</url>
+			  <releases>
+			    <enabled>true</enabled>
+			  </releases>
+			  <snapshots>
+			    <enabled>true</enabled>
+			  </snapshots>
+		</repository>
 	</repositories>
 
 	<pluginRepositories>
